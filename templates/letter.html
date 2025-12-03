@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Loan Sanction Letter</title>
+    <style>
+        body {
+            font-family: "Times New Roman", serif;
+            margin: 40px;
+            color: #000;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            text-decoration: underline;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 6px;
+            text-decoration: underline;
+        }
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Loan Sanction Letter</h2>
+
+    <p>
+        <span class="bold">Tata Capital Finance Ltd.</span><br>
+        3rd Floor, Sector 15 Branch<br>
+        New Delhi - 110001<br>
+        Contact: +91-9876543210<br>
+        Date: {{ date }}
+    </p>
+
+    <br>
+
+    <p>
+        To,<br>
+        <span class="bold">{{ customer_name }}</span><br>
+        {{ customer_city }}, India
+    </p>
+
+    <br>
+
+    <p>
+        <span class="bold">Subject:</span> Sanction of Personal Loan – Application Ref No. {{ application_no }}
+    </p>
+
+    <br>
+
+    <p>Dear {{ customer_name }},</p>
+
+    <p>
+        We are pleased to inform you that your application for a Personal Loan has been reviewed and approved.
+        We are now in a position to sanction a loan facility for you, subject to the following terms and conditions.
+    </p>
+
+    <div class="section-title">Loan Details</div>
+
+    <p>
+        Loan Amount: <span class="bold">₹{{ loan_amount }}</span><br>
+        Interest Rate: <span class="bold">12% per annum</span> (Fixed rate)<br>
+        Loan Tenure: <span class="bold">{{ tenure }} months</span><br>
+        Equated Monthly Installment (EMI): <span class="bold">₹{{ emi }}</span><br>
+        Mode of Repayment: Bank Account Auto Debit<br>
+        Purpose: Personal Use
+    </p>
+
+    <div class="section-title">Fees and Charges</div>
+
+    <p>
+        Processing Fee: ₹999<br>
+        Other Charges: NIL<br>
+        Prepayment / Foreclosure Charges: As per lender policy
+    </p>
+
+    <div class="section-title">Security</div>
+
+    <p>No collateral required.</p>
+
+    <div class="section-title">Special Conditions</div>
+
+    <p>
+        1. PAN verification required<br>
+        2. Salary slip of last 3 months<br>
+    </p>
+
+    <div class="section-title">Validity of Sanction</div>
+
+    <p>
+        This sanction letter is valid for a period of <span class="bold">60 days</span> from the date of issue.
+        If the loan is not availed within this period, the sanction will automatically stand canceled.
+    </p>
+
+    <div class="section-title">Acceptance of Terms</div>
+
+    <p>
+        Please read all the terms and conditions carefully. Your acceptance must be confirmed by signing
+        and returning a copy of this letter to us.
+    </p>
+
+    <div class="section-title">Important Notice</div>
+
+    <p>
+        This sanction letter is a provisional approval and is not the final loan agreement.  
+        The disbursement of the loan is subject to satisfactory verification of all documents and completion of legal formalities.
+    </p>
+
+    <br><br>
+
+    <p>
+        Sincerely,<br><br>
+        ____________________________<br>
+        Authorized Signatory<br>
+        Tata Capital Finance Ltd.<br>
+        Contact: +91-9876543210
+    </p>
+
+    <br><br>
+
+    <div class="section-title">Confirmation and Acceptance by Borrower</div>
+
+    <p>
+        I, <span class="bold">{{ customer_name }}</span>, have read, understood and accepted all the terms and
+        conditions mentioned in this sanction letter.
+    </p>
+
+    <br><br>
+
+    ____________________________<br>
+    Borrower Signature<br>
+    Date: ______________________
+
+</body>
+</html>
+    

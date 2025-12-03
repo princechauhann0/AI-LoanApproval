@@ -1,0 +1,139 @@
+:root {
+            --bg: #0f1724;
+            --card: #111827;
+            --muted: #9ca3af;
+            --accent: #6366f1;
+            --text: #e6eef8;
+            --input: #0b1220;
+            --radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+            background: linear-gradient(180deg, var(--bg) 0%, #081027 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 32px 16px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(2, 6, 23, 0.6);
+        }
+
+        .cardHeader {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .cardHeader h2 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .cardHeader p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .cardContent {
+            padding: 20px;
+        }
+
+        .formGroup {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: var(--input);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: var(--muted);
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.08);
+        }
+
+        .formRow {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .submitBtn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 0;
+            background: var(--accent);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submitBtn:hover {
+            opacity: 0.95;
+        }
+
+        .successMessage {
+            padding: 36px 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .successMessage.show {
+            display: block;
+        }
+
+        @media (max-width:640px) {
+            .formRow {
+                grid-template-columns: 1fr;
+            }
+        }

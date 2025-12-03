@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Approval AI</title>
+    <link rel="stylesheet" href="/static/css/chat.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <button class = "new-chat-btn" id="newChatBtn">New Chat</button>
+            <div class = "chat-history" id="chatHistory">
+                <div class = "history-item active">Current Conversation</div>
+            </div>
+        </div>
+
+        <div class = "main-area">
+
+            <div class="chat-header">
+                <h1>Loan Approval AI</h1>
+                <button class="icon-btn" id="clearBtn">Clear</button>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <div class="empty-state" id="emptyState">
+                    <h2>How can I help you today?</h2>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <div class="input-container">
+                        <textarea class="input-field" id="messageInput" placeholder="Message AI Assistant..."
+                            rows="1"></textarea>
+
+                        <button class="send-btn" id="sendBtn">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="/static/js/chat.js"></script>
+
+</body>
+
+</html>
+
+
+
+
+
+

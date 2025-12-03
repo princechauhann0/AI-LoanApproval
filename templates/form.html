@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ADMIN PANEL - Add Customer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>ADMIN PANEL</h1>
+            <p>Fill customer details to save into the database.</p>
+        </div>
+
+        <div class="card">
+
+            <div class="cardHeader">
+                <h2>Add Customer</h2>
+                <p>Customer will be saved in Firebase Realtime Database</p>
+            </div>
+
+            <div class="cardContent">
+                <form action="/add-customer" method="POST" id="loanForm">
+
+                    <div class="formGroup">
+                        <label for="customerName">Customer Name</label>
+                        <input id="customerName" name="customerName" type="text" required />
+                    </div>
+
+                    <div class="formGroup">
+                        <label for="phoneNumber">Phone Number (Customer ID)</label>
+                        <input id="phoneNumber" name="phoneNumber" type="tel" required />
+                    </div>
+
+                    <div class="formRow">
+                        <div class="formGroup">
+                            <label for="age">Age</label>
+                            <input id="age" name="age" min="18" max="100" required />
+                        </div>
+
+                        <div class="formGroup">
+                            <label for="city">City</label>
+                            <input id="city" name="city" type="text" required />
+                        </div>
+                    </div>
+
+                    <div class="formGroup">
+                        <label for="panNumber">PAN Number</label>
+                        <input id="panNumber" name="panNumber" type="text" style="text-transform: uppercase;"
+                            pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" required />
+                    </div>
+                    
+                    <div class="formGroup">
+                        <label for="emailAddress">Email ID</label>
+                        <input id="emailAddress" name="emailAddress" type="text" />
+                    </div>
+
+                    <div class="formRow">
+                        <div class="formGroup">
+                            <label for="salary">Salary</label>
+                            <input id="salary" name="salary" required />
+                        </div>
+
+                        <div class="formGroup">
+                            <label for="currentLoan">Current Loan</label>
+                            <input id="currentLoan" name="currentLoan" required />
+                        </div>
+                    </div>
+
+                    <div class="formGroup">
+                        <label for="creditScore">Credit Score</label>
+                        <input id="creditScore" name="creditScore" min="300" max="900" required />
+                    </div>
+
+                    <button type="submit" class="submitBtn">Submit</button>
+
+                </form>
+
+                <div id="successMessage" class="successMessage">
+                    <h2>Customer Added Successfully!</h2>
+                    <p>You can now use the Customer ID in the chat system.</p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
