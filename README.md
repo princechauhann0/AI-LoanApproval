@@ -1,131 +1,109 @@
-## 🏦 Loan AI Assistant (Multi-Agent • Flask + Firebase + Gemini)
+# 🏦 Loan AI Assistant
+### Multi-Agent • Flask • Firebase • Gemini
 
-An intelligent multi-agent loan assistance system built using Flask, Firebase, Google Gemini, and LangChain.
+An intelligent **multi-agent loan assistance system** built using **Flask**, **Firebase**, **Google Gemini**, and **LangChain**.
 
-This project simulates 4 internal AI agents:
+Your system simulates **4 internal AI agents**:
 
-🟦 KYC Agent – verifies customers
+- 🟧 **orchestrator Agent** – Talks to users & routes tasks  
+- 🟦 **Verification Agent** – Verifies customer identity  
+- 🟩 **Underwriting Agent** – EMI calculation & approval  
+- 🟪 **Documentation Agent** – Generates sanction letters  
 
-🟩 Underwriting Agent – EMI & approval
+---
 
-🟪 Documentation Agent – creates sanction letters
+# 🚀 Features
 
-🟧 Supervisor Agent – talks to user & routes tasks
+## 🤖 Multi-Agent AI System
+- Supervisor controls the flow  
+- Detects customer IDs (`custXXXX`) automatically  
+- Detects loan amounts automatically 
+- Friendly conversational responses for general questions
 
-## 🚀 Features
-👥 Multi-Agent AI System
-
-Supervisor Agent handles the conversation
-
-KYC Agent validates customer ID
-
-Underwriter Agent decides loan approval
-
-Documentation Agent generates & emails sanction letters
-
-Smooth, guided chat loan flow
-
-Smart detection of custXXXX IDs
-
-Smart detection of loan amount numbers
-
-Uses backend Flask calls via tokens:
-
-[[FLASK_CALL:VERIFY_KYC]]
-
-[[FLASK_CALL:UNDERWRITE]]
+---
 
 ## 👤 Customer Management (Admin Panel)
+- Add & manage customers easily  
+- Stores records in **Firebase Realtime Database**  
+- Automatically saves:
+- Name  
+- Email  
+- Phone  
+- PAN  
+- Salary  
+- Credit Score  
+- Pre-approved Limit  
+- Current Loan Status  
+- Dummy fallback customers included
 
-Add customers using the customer form panel
+---
 
-Stores customer data in Firebase Realtime Database
+## 💬 Chat History (Firebase)
 
-Automatically saves:
-
-Name
-
-Email
-
-Phone
-
-PAN
-
-Salary
-
-Credit score
-
-Pre-approved limit
-
-Current loan status
-
-Dummy customers available as fallback
-
-## 📂 Chat History (Firebase)
-
-Every chat is stored under:
-
+Messages stored at:
+```bash
 /sessions/<session_id>/messages
-
-
-Session metadata stored under:
-
+```
+Session metadata stored at:
+```bash
 /sessions/<session_id>/meta
+```
 
-## 📄 Auto PDF Sanction Letters
+---
 
-Fully automated:
+## 📄 Automated Sanction Letters
 
-PDF generation with XHTML2PDF
+The system auto-generates PDF sanction letters:
 
-Customer details
+- Customer details  
+- Loan amount, EMI, Tenure  
+- Interest rate  
+- Validity period  
+- Conditions  
+- Processing fee  
+- Sends email via **Gmail SMTP**  
 
-Loan amount, EMI, Tenure
+Powered by **XHTML2PDF** & **ReportLab**.
 
-Validity period
+---
 
-Processing fees & conditions
+# 🧱 Tech Stack
 
-Auto email using Gmail SMTP
+| Component | Technology |
+|----------|------------|
+| Backend | Flask |
+| Multi-Agent Logic | Simulated Supervisor + 3 Worker Agents |
+| AI Model | Google Gemini (LangChain) |
+| Database | Firebase Realtime DB |
+| PDF Engine | XHTML2PDF / ReportLab |
+| Email Sender | Gmail SMTP |
+| Frontend | HTML, CSS, JS |
+| Deployment | Render |
 
-## 🧱 Tech Stack
-Component	Technology
+---
 
-Backend	Flask
+# 🔗 Live Demo
+[![Live Demo](https://img.shields.io/badge/Visit-Live%20App-green?style=for-the-badge)](https://ai-loanapproval.onrender.com)
 
-Multi-Agent System	Simulated Supervisor + 3 Worker Agents
+---
 
-AI Model	Google Gemini (LangChain)
+# 🔧 Setup Instructions
 
-Database	Firebase Realtime DB
+## 📥 Installation
 
-PDF Engine	XHTML2PDF / ReportLab
-
-Email	Gmail SMTP
-
-Frontend	HTML, CSS, JS
-
-Deployment	Render
-
-
-## 🔗 Live Demo  
-[![Live Demo](https://img.shields.io/badge/Visit-Live%20App-green?style=for-the-badge)](https://ai-loanapproval.onrender.com) 
-
-## 🔧 Setup Instructions
-📥 Installation
-1️⃣ Clone the repository
+### 1️⃣ Clone the repository
 ```bash
 git clone https://github.com/yourusername/Loan-Approval-AI-1
 cd Loan-Approval-AI-1
 ```
-2️⃣ Install dependencies
+### 2️⃣ Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
-3️⃣ Create your config.json
-```bash
-Create a file named config.json in the project folder:
+### 3️⃣ Create config.json
 
+Create a file in the project root named config.json with the following structure:
+```bash
 {
   "firebase_database_url": "",
   "firebase_api_key": "",
@@ -137,17 +115,16 @@ Create a file named config.json in the project folder:
   "gmail_from": ""
 }
 ```
-▶️ Usage
-🧠 Start the Multi-Agent Chat System
+### ▶️ Usage
+🧠 Run the Multi-Agent Chat System
 ```bash
 python app.py
 ```
-
-Runs on:
+Runs at:
 ```bash
 http://localhost:5000
 ```
-📝 Open the Admin Customer Panel
+### 📝 Run Customer Admin Panel (optional)
 ```bash
 python form_app.py
 ```
