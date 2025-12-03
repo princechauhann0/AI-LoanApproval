@@ -90,13 +90,21 @@ Auto email using Gmail SMTP
 
 ## 🧱 Tech Stack
 Component	Technology
+
 Backend	Flask
+
 Multi-Agent System	Simulated Supervisor + 3 Worker Agents
+
 AI Model	Google Gemini (LangChain)
+
 Database	Firebase Realtime DB
+
 PDF Engine	XHTML2PDF / ReportLab
+
 Email	Gmail SMTP
+
 Frontend	HTML, CSS, JS
+
 Deployment	Render
 
 
