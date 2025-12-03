@@ -54,6 +54,10 @@ The assistant follows the loan flow:
 
 ---
 
+## 🔗 Live Demo  
+[![Live Demo](https://img.shields.io/badge/Visit-Live%20App-green?style=for-the-badge)](https://ai-loanapproval.onrender.com)
+
+
 ## 🔧 Setup Instructions
 
 # Installation
