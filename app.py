@@ -29,10 +29,13 @@ except:
     class AIMessage:
         def __init__(self, content): self.content = content
 
-CONFIG_PATH = "config.json"
-config = json.load(open(CONFIG_PATH))
+if os.path.exists("/etc/secrets/config.json"):
+    CONFIG_PATH = "/etc/secrets/config.json"
+else:
+    CONFIG_PATH = "config.json"
 
-
+with open(CONFIG_PATH, "r") as f:
+    config = json.load(f)
 
 FIREBASE_DB_URL = config.get("firebase_database_url", "").rstrip("/")
 FIREBASE_API_KEY = config.get("firebase_api_key", "")
@@ -50,8 +53,6 @@ if API_KEY:
     os.environ["GOOGLE_GENAI_API_KEY"] = API_KEY
     os.environ["GOOGLE_API_USE_CLIENT_CERTIFICATE"] = "false"
 
-
-
 app = Flask(__name__, static_folder="static", static_url_path="/static", template_folder="templates")
 CORS(app)
 
@@ -67,34 +68,33 @@ llm = None
 if ChatGoogleGenerativeAI and API_KEY:
     try:
         llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=API_KEY, temperature=MODEL_TEMP, safety_settings=None)
-    except:
+    except Exception:
         llm = None
 
 LLM_SYSTEM_PROMPT = """
-You are the Master Agent for Loan Sales.
+You are the Supervisor Agent for a Loan Sales assistant that simulates three worker agents internally\n\n:
+  1) Verification Agent — verifies customer IDs and fetches customer data\n\n.
+  2) Underwriting Agent — calculates EMI, decides Pre-Approve/Approve/Reject and forms underwriting messages\n\n.
+  3) Documentation Agent — prepares sanction letter content and confirms document generation\n\n.
 
-Primary tasks:
-1. If user provides a customer ID (custXXXXX format) → respond only [[FLASK_CALL:VERIFY_KYC]].
-2. After KYC is successful, if user provides a loan amount → respond only [[FLASK_CALL:UNDERWRITE]].
-3. After underwriting and sanction email sent, if user asks about sanction letter → reply normally: "Your sanction letter has already been emailed."
+RULES (very strict):
+- You must behave as one Supervisor who *simulates* the other agents internally\n.
+- If the user provides a customer ID in the format custXXXX (case-insensitive), the Supervisor MUST trigger a backend KYC call by replying **only** with the token: [[FLASK_CALL:VERIFY_KYC]] (optionally accompanied by a short user-visible confirmation before returning the token).
+- After KYC is successful (the backend will respond), when the user provides a loan amount (numbers), the Supervisor MUST trigger underwriting by replying **only** with: [[FLASK_CALL:UNDERWRITE]] (optionally accompanied by a short user-visible confirmation before returning the token).
+- NEVER invent any other FLASK_CALL tokens or mix explanatory text with the FLASK_CALL token on the same exact line. If you must include visible text plus a token, put the token in a separate line by itself.
+- For general questions (EMI explanation, docs required, loan types, greetings, etc.) respond normally as a friendly Supervisor (no FLASK_CALL).
+- When simulating agents internally to arrive at a decision, do not expose your internal chain-of-thought; only output user-facing text or the exact FLASK_CALL tokens described above.
+- Keep answers concise, helpful, and follow the flow:
+    * Ask for customer ID if missing.
+    * After KYC success, ask for loan amount if missing.
+    * After underwriting success and document sent, say "Sanction letter sent to <email>."
 
-Fallback Behavior:
-If the user asks *anything else* (general queries, doubts, FAQs, off-topic questions, banking information, loan info, etc.),
-respond normally in a helpful and friendly tone WITHOUT triggering FLASK_CALL.
+Output rules summary:
+- If you want the backend to perform KYC: reply with exactly `[[FLASK_CALL:VERIFY_KYC]]` (on its own line).
+- If you want the backend to perform underwriting: reply with exactly `[[FLASK_CALL:UNDERWRITE]]` (on its own line).
+- Otherwise, reply with normal conversational text.
 
-Examples:
-- "What is EMI?" → explain EMI.
-- "What documents are needed?" → answer normally.
-- "Tell me about personal loans" → answer normally.
-- "Who are you?" → answer normally.
-- "I want to calculate monthly EMI" → explain formula.
-
-Important:
-NEVER trigger FLASK_CALL unless:
-- User provides a valid customer ID → VERIFY_KYC
-- User provides a loan amount AFTER KYC → UNDERWRITE
-
-NEVER mix text with FLASK_CALL commands.
+Be a supervisor and keep user experience friendly.
 """
 
 def get_session_history(session_id):
@@ -293,23 +293,44 @@ def local_master_agent(session_id, text):
 def chat():
     data = request.json
     session_id = data.get("session_id")
-    user_input = data.get("user_input")
+    user_input = data.get("user_input", "")
+    if not session_id:
+        session_id = f"sess_{int(time.time())}"
     save_message_to_firebase(session_id, "user", user_input)
+
     hist = get_session_history(session_id)
     hist.append(HumanMessage(content=user_input))
+
     if llm:
         try:
+            # Single call to LLM acting as Supervisor that simulates agents
             res = llm.invoke(hist)
             text = getattr(res, "content", "")
-        except:
+            # Defensive: if langchain returns a list or dict, try to extract text
+            if isinstance(text, (list, dict)):
+                text = str(text)
+        except Exception:
+            # fallback to local deterministic supervisor
             text = local_master_agent(session_id, user_input)
     else:
         text = local_master_agent(session_id, user_input)
+
     hist.append(AIMessage(content=text))
     save_message_to_firebase(session_id, "bot", text)
+
+    # Find orchestration command if present
     m = re.search(r"\[\[FLASK_CALL:([A-Z_]+)\]\]", text)
     cmd = f"[[FLASK_CALL:{m.group(1)}]]" if m else None
-    return jsonify({"response_text": "Processing request..." if cmd else text, "orchestration_command": cmd})
+
+    # If Supervisor returned a FLASK_CALL token, respond with processing message + token
+    if cmd:
+        # Supervisor may optionally include a short friendly line before the token;
+        # return the orchestration command so frontend can call /orchestrate.
+        return jsonify({"response_text": "Processing request...", "orchestration_command": cmd})
+
+    # Otherwise return normal reply
+    return jsonify({"response_text": text, "orchestration_command": None})
+
 
 @app.route("/orchestrate", methods=["POST"])
 def orchestrate():
@@ -356,7 +377,7 @@ def orchestrate():
             })
 
         return jsonify({"status": "complete", "worker_message": result["message"]})
-    
+
 @app.route("/new_chat")
 def new_chat():
     session_id = f"sess_{int(time.time())}"
@@ -370,4 +391,3 @@ def index():
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
-
