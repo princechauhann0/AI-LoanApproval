@@ -12,7 +12,8 @@ function typeWriterEffect(element, text, speed = 20) {
 
     function type() {
         if (index < words.length) {
-            element.innerHTML += (index === 0 ? "" : " ") + words[index];
+            const formatted = formatMessage(words[index]);
+            element.innerHTML += (index === 0 ? "" : " ") + formatted;
             index++;
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
             setTimeout(type, speed);
@@ -21,6 +22,7 @@ function typeWriterEffect(element, text, speed = 20) {
 
     type();
 }
+
 
 let session_id = null;
 
@@ -162,6 +164,13 @@ async function handleOrchestration(cmd, user_text) {
     }
 }
 
+function formatMessage(text) {
+    return text
+        .replace(/\n/g, "<br>")
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/^\s*[-*]\s+(.*)/gm, "• $1");
+}
+
 function addMessage(text, sender) {
     if (emptyState) emptyState.style.display = "none";
 
@@ -186,7 +195,7 @@ function addMessage(text, sender) {
     if (sender === "assistant") {
         typeWriterEffect(messageText, text, 35);
     } else {
-        messageText.innerText = text;
+        messageText.innerHTML = formatMessage(text);
     }
 
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
